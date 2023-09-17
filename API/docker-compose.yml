@@ -1,0 +1,29 @@
+version: '3.4'
+
+services:
+  halloffame:
+    image: ${DOCKER_REGISTRY-}halloffame
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "5000:80"
+    environment:
+      ConnectionStrings_Postgres: "Host=db;Port=5432;Database=HallOfFameDb;Username=postgres;Password=123"
+    depends_on:
+      - db
+
+  db:
+    container_name: db
+    image: postgres:12
+    ports:
+      - "5432:5432" 
+    environment:
+      POSTGRES_PASSWORD: 123
+      POSTGRES_USER: postgres
+      POSTGRES_DB: HallOfFameDb
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+volumes:
+  pgdata: {}
